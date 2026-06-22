@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # Serwer WWW (Apache + PHP)
+  web:
+    build: .
+    ports:
+      - "8080:80"  # Wpisując w przeglądarce localhost:8080, trafisz na port 80 kontenera
+    volumes:
+      - .:/var/www/html  # Zmiany w kodzie na Macu od razu odświeżają się w kontenerze
+    depends_on:
+      - db
+
+  # Serwer Bazy Danych (MySQL)
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ''  # Puste hasło root, tak jak masz w pliku rejestracja.php
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: 'Kino'   # Docker sam stworzy czystą bazę o nazwie Kino
+    ports:
+      - "3306:3306"
